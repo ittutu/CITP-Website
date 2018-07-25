@@ -42,7 +42,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#page-top">Case analysis</a>
+              <a class="nav-link js-scroll-trigger" href="#page-top">DS</a>
             </li>
           </ul>
         </div>
@@ -52,7 +52,7 @@
     <!-- Header -->
     <header>
       <div class="container text-center">
-        <h1>Case analysis</h1>
+        <h1>Decoding Stream</h1>
       </div>
     </header>
 
@@ -62,26 +62,10 @@
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <p>
-              Consider the following two functions on natural numbers:
-              $$
-              F(x) = \left\{
-              \begin{array}{ll}
-              5 & \text{if}\ x \leq 7 \\
-              1 & \text{if}\ 8 \leq x
-              \end{array}\right.
-              \qquad
-              \text{and}
-              \qquad
-              G(x) = \left\{
-              \begin{array}{ll}
-              2 & \text{if}\ x \leq 4 \\
-              7 & \text{if}\ 5 \leq x
-              \end{array}\right.
-              $$
-            </p>
-
-            <p>
-              The aim is to prove that $9 \leq G(F(x)) + G(x)$ for all natural numbers $x$.
+              One agent puts repeatedly pairs <code>< bit, d ></code> of bits and encoded datas into a <code>channel</code> which automatically decodes the information.
+              When the agent reads <code>< bit', d' ></code> from the <code>channel</code> such that <code>bit = bit'</code>, it is a confirmation that the data sent for decoding was received.
+              In thad case, the agent stores the data received into a list structure, alternates the <code>bit</code>, and selects the next encoded data for sending.
+              We assume that the <code>channel</code> is unreliable, meaning that the data in the channel may be lost or duplicated, but not exchanged or damaged.
             </p>
           </div>
         </div>
@@ -99,7 +83,7 @@
             <pre class="pre-scrollable"><code id="spec" class="maude hljs"></code></pre>
             <script>
               jQuery.ajax({
-                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude",
+                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/ds/ds.maude",
                 dataType: "text",
                 success : function (data) {
                   $("#spec").text(data);
@@ -108,7 +92,7 @@
             </script>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude">fun.maude</a> for the full specification.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/ds/ds.maude">ds.maude</a> for the full specification.
             </p>
 
           </div>
@@ -124,14 +108,22 @@
             
             <h2>Verification</h2>
 
-            <p>
-              The goal is easily discharged using the theorem of constants (i.e. by adding the variables of the goal to the body of the specification <code class="maude">FG-FUN</code> as fresh constants), case analysis, and reduction.
-            </p>
-            
-            <pre><code class="maude hljs">FG-FUN |- eq 9 <= G(F(X:Nat)) + G(X:Nat) = true ; </code></pre>
+            For the verification of the Decoding Stream, we are interested in two properties.
+
+            <h3>If the channel contains <code>bit</code>, then all the bits after <code>bit</code> are equal to <code>bit</code>.</h3>
+                
+            <pre><code class="maude hljs">DS |- ceq B':Bit = bit(S:Sys) if C1:Channel, < B:Bit,D:Data >, C2:Channel, < B':Bit,D':Data >, C3:Channel := channel(S:Sys) /\ B:Bit = bit(S:Sys) ;</code></pre>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/goal.maude">goal.maude</a> for the full proof.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/ds/proof1.maude">proof1.maude</a> for the full proof.
+            </p>
+
+            <h3>All encrypted data sent are decoded and stored in the list structure in the same order in which they were sent.</h3>
+                
+            <pre><code class="maude hljs">DS |- eq mk(next(S:Sys)) = data(next(S:Sys)), list(S:Sys) ;</code></pre>
+
+            <p>
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/ds/proof2.maude">proof2.maude</a> for the full proof.
             </p>
 
           </div>

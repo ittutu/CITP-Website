@@ -19,11 +19,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script src="../../js/maude.js"></script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
   </head>
 
   <body id="page-top">
@@ -42,7 +37,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#page-top">Case analysis</a>
+              <a class="nav-link js-scroll-trigger" href="#page-top">QLOCK – OTS/CafeOBJ method</a>
             </li>
           </ul>
         </div>
@@ -52,7 +47,8 @@
     <!-- Header -->
     <header>
       <div class="container text-center">
-        <h1>Case analysis</h1>
+        <h1>Mutual Exclusion Protocol (QLOCK)</h1>
+        <p class="lead">OTS/CafeOBJ method</p>
       </div>
     </header>
 
@@ -62,26 +58,9 @@
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <p>
-              Consider the following two functions on natural numbers:
-              $$
-              F(x) = \left\{
-              \begin{array}{ll}
-              5 & \text{if}\ x \leq 7 \\
-              1 & \text{if}\ 8 \leq x
-              \end{array}\right.
-              \qquad
-              \text{and}
-              \qquad
-              G(x) = \left\{
-              \begin{array}{ll}
-              2 & \text{if}\ x \leq 4 \\
-              7 & \text{if}\ 5 \leq x
-              \end{array}\right.
-              $$
-            </p>
-
-            <p>
-              The aim is to prove that $9 \leq G(F(x)) + G(x)$ for all natural numbers $x$.
+              Assume that many agents (or processes) are competting for a common resource, but that at any given moment of time only one agent can use the resource.
+              That is, the agents exclude or prevent each other from accessing the resource.
+              A protocol that can gurantee this kind of mutual-exclusion property is called a <em>mutual exclusion protocol</em> (<a href="https://github.com/ittutu/CITP/raw/master/Examples/qlock/qlock.pdf">slides</a>).
             </p>
           </div>
         </div>
@@ -99,7 +78,7 @@
             <pre class="pre-scrollable"><code id="spec" class="maude hljs"></code></pre>
             <script>
               jQuery.ajax({
-                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude",
+                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/qlock/ots/qlock.maude",
                 dataType: "text",
                 success : function (data) {
                   $("#spec").text(data);
@@ -108,7 +87,7 @@
             </script>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude">fun.maude</a> for the full specification.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/qlock/ots/qlock.maude">qlock.maude</a> for the full specification.
             </p>
 
           </div>
@@ -124,14 +103,20 @@
             
             <h2>Verification</h2>
 
-            <p>
-              The goal is easily discharged using the theorem of constants (i.e. by adding the variables of the goal to the body of the specification <code class="maude">FG-FUN</code> as fresh constants), case analysis, and reduction.
-            </p>
-            
-            <pre><code class="maude hljs">FG-FUN |- eq 9 <= G(F(X:Nat)) + G(X:Nat) = true ; </code></pre>
+            <h3>If a process/agent is in the critical section, then it is at the top of waiting queue.</h3>
+
+            <pre><code class="maude hljs">QLOCK |- ceq top(sq(S:Sys))= I:X$Pid if pc(S:Sys,I:X$Pid)= cs [nonexec] ;</code></pre>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/goal.maude">goal.maude</a> for the full proof.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/qlock/ots/qinv.maude">qinv.maude</a> for the full proof.
+            </p>
+
+            <h3>Only one agent can be in the critical section at a given moment.</h3>
+
+            <pre><code class="maude hljs">GOAL |-  ceq I:X$Pid = J:X$Pid if pc(S:Sys,I:X$Pid)= cs /\ pc(S:Sys,J:X$Pid)= cs ;</code></pre>
+
+            <p>
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/qlock/ots/qgoal.maude">qgoal.maude</a> for the full proof.
             </p>
 
           </div>

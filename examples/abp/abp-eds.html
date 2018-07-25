@@ -37,7 +37,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#page-top">ABP – states described explicitly</a>
+              <a class="nav-link js-scroll-trigger" href="#page-top">ABP – explicitly described states</a>
             </li>
           </ul>
         </div>
@@ -48,7 +48,7 @@
     <header>
       <div class="container text-center">
         <h1>The Alternating Bit Protocol (ABP)</h1>
-        <p class="lead">states described explicitly</p>
+        <p class="lead">explicitly described states</p>
       </div>
     </header>
 
@@ -82,7 +82,7 @@
                 
               </ul>
 
-              A snapshot of the protocol can be found <a href="examples/abp/snapshot/ABPsnapshot.pdf">here.</a>
+              A snapshot of the protocol can be found <a href="https://github.com/ittutu/CITP/raw/master/Examples/abp/abp.pdf">here.</a>
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@
             <pre class="pre-scrollable"><code id="spec" class="maude hljs"></code></pre>
             <script>
               jQuery.ajax({
-                url: "abp.maude",
+                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/abp/eds/abp.maude",
                 dataType: "text",
                 success : function (data) {
                   $("#spec").text(data);
@@ -109,7 +109,7 @@
             </script>
 
             <p>
-              See <a href="abp.maude">abp.maude</a> for the full specification.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/abp/eds/abp.maude">abp.maude</a> for the full specification.
             </p>
 
           </div>
@@ -132,7 +132,7 @@
 
             <p>
               This is achieved in three main steps.
-              The overall structure is similar to that of the <a href="../abp/abp.html">OTS/CafeOBJ method</a>, but the formalization is different.
+              The overall structure is similar to that of the <a href="abp-ots.html">OTS/CafeOBJ method</a>, but the formalization is different.
             </p>
               
             <h3>1. ABP ⊢ {inv1, inv2, inv3, inv4}</h3>
@@ -165,7 +165,7 @@
             </p>
 
             <p>
-              See <a href="inv.maude">inv.maude</a> for the full proof.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/abp/eds/inv.maude">inv.maude</a> for the full proof.
             </p>
 
             <h3>2. ABP + {inv1, inv2, inv3, inv4} ⊢ inv5</h3>
@@ -183,7 +183,7 @@
             </p>
 
             <p>
-              See <a href="inv5.maude">inv5.maude</a> for the full proof.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/abp/eds/inv5.maude">inv5.maude</a> for the full proof.
             </p>
 
             <h3>3. ABP + {inv2, inv3, inv5} ⊢ {goal1, goal2}</h3>
@@ -206,7 +206,7 @@
             </p>
 
             <p>
-              See <a href="goal.maude">goal.maude</a> for the full proof.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/abp/eds/goal.maude">goal.maude</a> for the full proof.
             </p>
 
           </div>

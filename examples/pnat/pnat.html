@@ -87,7 +87,7 @@
             <pre class="pre-scrollable"><code id="spec" class="maude hljs"></code></pre>
             <script>
               jQuery.ajax({
-                url: "pnat.maude",
+                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/pnat/pnat.maude",
                 dataType: "text",
                 success : function (data) {
                   $("#spec").text(data);
@@ -96,7 +96,7 @@
             </script>
 
             <p>
-              See <a href="pnat.maude">pnat.maude</a> for the full specification.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/pnat/pnat.maude">pnat.maude</a> for the full specification.
             </p>
 
           </div>
@@ -121,7 +121,7 @@ PNAT |- eq M:PNat + s N:PNat = s(M:PNat + N:PNat) [metadata "lemma2"] ; </code><
             </p>
 
             <p>
-              See <a href="lemma.maude">lemma.maude</a> for a proof of these lemmas.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/pnat/lemma.maude">lemma.maude</a> for a proof of these lemmas.
             </p>
 
             <h3>Commutativity</h3>
@@ -129,7 +129,7 @@ PNAT |- eq M:PNat + s N:PNat = s(M:PNat + N:PNat) [metadata "lemma2"] ; </code><
             <pre><code class="maude hljs">PNAT + {lemma1, lemma2} |- eq M:PNat + N:PNat = N:PNat + M:PNat ; </code></pre>
 
             <p>
-              See <a href="comm.maude">comm.maude</a> for a proof of the commutativity.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/pnat/comm.maude">comm.maude</a> for a proof of the commutativity.
             </p>
 
             <h3>Associativity</h3>
@@ -137,7 +137,7 @@ PNAT |- eq M:PNat + s N:PNat = s(M:PNat + N:PNat) [metadata "lemma2"] ; </code><
             <pre><code class="maude hljs">PNAT |- eq (M:PNat + N:PNat) + P:PNat = N:PNat + (M:PNat + P:PNat) ;</code></pre>
 
             <p>
-              See <a href="assoc.maude">assoc.maude</a> for a proof of the associativity.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/pnat/assoc.maude">assoc.maude</a> for a proof of the associativity.
             </p>
 
           </div>

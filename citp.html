@@ -109,7 +109,7 @@
 
             <h2>Download</h2>
             <p>
-              CITP consists of only one file, <a href="tool/citp.maude">citp.maude</a> (now at version 2.0).
+              CITP consists of only one file, <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Tool/citp.maude">citp.maude</a> (now at version 2.0).
               However, please note that you need to have <a href="http://maude.cs.illinois.edu/w/index.php?title=Maude_download_and_installation">Maude</a> installed in order to use the tool.
             </p>
           </div>
@@ -125,12 +125,12 @@
 
             <h2>Instructions</h2>
             <p>
-              To use CITP, simply copy the file <a href="tool/citp.maude">citp.maude</a> to your current/working directory, start <a href="http://maude.lcc.uma.es/manual271/maude-manualch2.html#x13-240002.2">Maude</a>, and type:
+              To use CITP, simply copy the file <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Tool/citp.maude">citp.maude</a> to your current/working directory, start <a href="http://maude.lcc.uma.es/manual271/maude-manualch2.html#x13-240002.2">Maude</a>, and type:
               <pre><code class="nohighlight hljs">in citp</code></pre>
               See the following PDF for the list of commands available in CITP:
             </p>
             <ul>
-              <li> <a href="tool/readme.pdf">Readme</a>
+              <li> <a href="https://github.com/ittutu/CITP/raw/master/Doc/readme.pdf">Readme</a>
             </ul>
           </div>
         </div>
@@ -178,12 +178,11 @@
                 </div>
                 <div id="collapseParam" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                   <div class="card-body">
-                    <ul>
-                      <li> <a href="examples/list/list.maude">Specification </a>
-                      <li> <a href="examples/list/assoc.maude">Associativity of append</a>
-                      <li> <a href="examples/list/distLen.maude">Distributivity of length over append</a>
-                      <li> <a href="examples/list/distRev.maude">Distributivity of reverse over append</a>
-                    </ul>
+                    <p>
+                      This example shows one possible way of dealing with generic lists (with potentially void elements) in CITP, including operations for appending lists, computing their lengths, or reversing lists.
+                      We prove that the append operation is associative and that, moreover, both the length and the reverse operations distribute over append.
+                    </p>
+                    <p><a href="examples/list/list.html">Learn more</a></p>
                   </div>
                 </div>
               </div>
@@ -217,19 +216,12 @@
                 <div id="collapseDS" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                   <div class="card-body">
                     <p>
-                      One agent puts repeatedly pairs &lt; <em>bit, d</em> &gt; of bits and
-                      encoded datas into a <em>channel</em> which automatically decode the information. When
-                      the agent gets <em>&lt; bit&apos;, d&apos; &gt;</em> from the <em>channel</em>
-                      such that <em>bit</em> = <em>bit&apos;</em>, it is a confirmation that the data sent for decoding was received.
-                      In this case, the agent stores the data received into a list
-                      structure, alternates the <em>bit</em>, and selects the next encoded data for
-                      sending. We assume that the <em>channel</em> is unreliable, meaning
-                      that the data in the channel may be lost or duplicated, but not exchanged or damaged.
+                      One agent puts repeatedly pairs <code>< bit, d ></code> of bits and encoded datas into a <code>channel</code> which automatically decodes the information.
+                      When the agent reads <code>< bit', d' ></code> from the <code>channel</code> such that <code>bit = bit'</code>, it is a confirmation that the data sent for decoding was received.
+                      In thad case, the agent stores the data received into a list structure, alternates the <code>bit</code>, and selects the next encoded data for sending.
+                      We assume that the <code>channel</code> is unreliable, meaning that the data in the channel may be lost or duplicated, but not exchanged or damaged.
                     </p>
-                    <ul>
-                      <li> <a href="examples/ds/ds.maude">Specification</a>
-                      <li> <a href="examples/ds/proofs.html">Proofs</a> 
-                    </ul>
+                    <p><a href="examples/ds/ds.html">Learn more</a></p>
                   </div>
                 </div>
               </div>
@@ -245,15 +237,13 @@
                 <div id="collapseQLOCK" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                   <div class="card-body">
                     <p>
-                      Assume that many agents (or processes) are competting for a common
-                      equipment, but at any moment of time only one agent can use the
-                      equipment That is, the agents are mutually excluded in using the
-                      equipment. A protocol which can achieve the mutual exclusion is
-                      called "mutual exclusion protocol" (<a href="examples/qlock/qlock.pdf">slides</a>).
+                      Assume that many agents (or processes) are competting for a common resource, but that at any given moment of time only one agent can use the resource.
+                      That is, the agents exclude or prevent each other from accessing the resource.
+                      A protocol that can gurantee this kind of mutual-exclusion property is called a <em>mutual exclusion protocol</em> (<a href="https://github.com/ittutu/CITP/raw/master/Examples/qlock/qlock.pdf">slides</a>).
                     </p>
                     <ul>
-                      <li> <a href="examples/qlock/qlock.html">Solution 1 (OTS/CafeOBJ method) </a>
-                      <li> <a href="examples/qlockr/qlock.html"> Solution 2 (states described explicitly)</a>
+                      <li> <a href="examples/qlock/qlock-ots.html">Solution 1 (OTS/CafeOBJ method) </a>
+                      <li> <a href="examples/qlock/qlock-eds.html">Solution 2 (explicitly described states)</a>
                     </ul>
                   </div>
                 </div>
@@ -291,12 +281,12 @@
                           When Receiver reads a pair <code>< bit, pac ></code> such that <code>bit</code> is different from its bit, then it stores <code>pac</code> and flips its bit.
                       </ul>
 
-                      A snapshot of the protocol can be found <a href="examples/abp/snapshot/ABPsnapshot.pdf">here.</a>
+                      A snapshot of the protocol can be found <a href="https://github.com/ittutu/CITP/raw/master/Examples/abp/abp.pdf">here.</a>
                     </p>
 
                     <ul>
-                      <li> <a href="examples/abp/abp.html">Solution 1 (OTS/CafeOBJ method)</a>
-                      <li> <a href="examples/abpr/abp.html">Solution 2 (states described explicitly)</a>
+                      <li> <a href="examples/abp/abp-ots.html">Solution 1 (OTS/CafeOBJ method)</a>
+                      <li> <a href="examples/abp/abp-eds.html">Solution 2 (explicitly described states)</a>
                     </ul>
                   </div>
                 </div>
@@ -315,12 +305,12 @@
                     <p>
                       Consider a scenario where arbitrarily many PCs are connected to a Cloud in order to exchange messages – for simplicity, we treat these messages as natural values.
                       Each of the PCs can fetch the latest value from the cloud, compare it with their own value, and update the Cloud or their own value depending on which is larger;
-                      see the <a href="examples/cloud/cloud.pdf">Cloud in images</a>.
+                      see the <a href="https://github.com/ittutu/CITP/raw/master/Examples/cloud/cloud.pdf">Cloud in images</a>.
                     </p>
 
                     <ul>
-                      <li> <a href="examples/cloud/cloud.html">Solution 1 (OTS/CafeOBJ method)</a>
-                      <li> <a href="examples/cloudr/cloud.html">Solution 2 (states described explicitly)</a>
+                      <li> <a href="examples/cloud/cloud-ots.html">Solution 1 (OTS/CafeOBJ method)</a>
+                      <li> <a href="examples/cloud/cloud-eds.html">Solution 2 (explicitly described states)</a>
                     </ul>
                   </div>
                 </div>
@@ -337,13 +327,9 @@
                 <div id="collapseST" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                   <div class="card-body">
                     <p>
-                      Every connected graph has a spanning tree (<a href="examples/tree/tree.pdf">slides</a>).
+                      A proof of the fact that every connected graph has a spanning tree.
                     </p>
-
-                    <ul>
-                      <li> <a href="examples/tree/tree.maude">Specification</a>
-                      <li> <a href="examples/tree/proofs.html">Proofs</a>
-                    </ul>
+                    <p><a href="examples/tree/tree.html">Learn more</a></p>
                   </div>
                 </div>
               </div>

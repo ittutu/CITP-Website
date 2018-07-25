@@ -42,7 +42,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#page-top">Case analysis</a>
+              <a class="nav-link js-scroll-trigger" href="#page-top">GRAPH</a>
             </li>
           </ul>
         </div>
@@ -52,7 +52,7 @@
     <!-- Header -->
     <header>
       <div class="container text-center">
-        <h1>Case analysis</h1>
+        <h1>Spanning Tree</h1>
       </div>
     </header>
 
@@ -62,26 +62,7 @@
         <div class="row">
           <div class="col-lg-8 mx-auto">
             <p>
-              Consider the following two functions on natural numbers:
-              $$
-              F(x) = \left\{
-              \begin{array}{ll}
-              5 & \text{if}\ x \leq 7 \\
-              1 & \text{if}\ 8 \leq x
-              \end{array}\right.
-              \qquad
-              \text{and}
-              \qquad
-              G(x) = \left\{
-              \begin{array}{ll}
-              2 & \text{if}\ x \leq 4 \\
-              7 & \text{if}\ 5 \leq x
-              \end{array}\right.
-              $$
-            </p>
-
-            <p>
-              The aim is to prove that $9 \leq G(F(x)) + G(x)$ for all natural numbers $x$.
+              The aim is to prove that every connected graph has a spanning tree (<a href="https://github.com/ittutu/CITP/raw/master/Examples/tree/tree.pdf">slides</a>).
             </p>
           </div>
         </div>
@@ -99,7 +80,7 @@
             <pre class="pre-scrollable"><code id="spec" class="maude hljs"></code></pre>
             <script>
               jQuery.ajax({
-                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude",
+                url: "https://raw.githubusercontent.com/ittutu/CITP/master/Examples/tree/tree.maude",
                 dataType: "text",
                 success : function (data) {
                   $("#spec").text(data);
@@ -108,7 +89,7 @@
             </script>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/fun.maude">fun.maude</a> for the full specification.
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/tree/tree.maude">pnat.maude</a> for the full specification.
             </p>
 
           </div>
@@ -125,13 +106,35 @@
             <h2>Verification</h2>
 
             <p>
-              The goal is easily discharged using the theorem of constants (i.e. by adding the variables of the goal to the body of the specification <code class="maude">FG-FUN</code> as fresh constants), case analysis, and reduction.
+              In the attempt of proving that every connected graph has a spanning tree, we realized that it is much easier to prove that every graph has a spanning forest.
             </p>
-            
-            <pre><code class="maude hljs">FG-FUN |- eq 9 <= G(F(X:Nat)) + G(X:Nat) = true ; </code></pre>
 
             <p>
-              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/fun/goal.maude">goal.maude</a> for the full proof.
+              A spanning forest of a graph is a subgraph that consists of a set of spanning trees, one for each maximally connected component of the initial graph. 
+            </p>
+
+            <h3><code>mktree</code> preserves the maximal connected componets of each vertex.</h3>
+
+            <pre><code class="maude hljs">GRAPH |- mcc(A, mktree(G)) = mcc(A, G) ;</code></pre>
+
+            <p>
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/tree/th1.maude">th1.maude</a> for the full proof.
+            </p>
+
+            <h3><code>mktree</code> preserves the number of maximally connected componets.</h3>
+
+            <pre><code class="maude hljs">GRAPH |- nomcc(mktree(G)) = nomcc(G) ;</code></pre>
+
+            <p>
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/tree/th2.maude">th2.maude</a> for the full proof.
+            </p>
+
+            <h3><code>mktree</code> eliminates the cycles.</h3>
+
+            <pre><code class="maude hljs">GRAPH |- nocycle(mktree(G)) = true ;</code></pre>
+
+            <p>
+              See <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Examples/tree/th3.maude">th3.maude</a> for the full proof.
             </p>
 
           </div>
