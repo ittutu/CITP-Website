@@ -44,6 +44,18 @@
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#page-top">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#install-section">Install</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#use-section">Using the tool</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#examples-section">Examples</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#references-section">References</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -57,30 +69,603 @@
     </header>
 
     <!-- About section -->
-    <section id="about">
+    <section id="about-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
+            <p>The Constructor-based Theorem Prover (CITP) is a tool for proving inductive
+properties of software systems specified with constructor-based logics. The
+present document describes the main commands supported by CITP.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Specification section -->
-    <section id="about">
+    <!-- Install section -->
+    <section id="install-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
+            <h2 id="installing-the-citp">Installing the CITP</h2>
+<p>The CITP uses <a href="http://maude.cs.illinois.edu/w/index.php?title=The_Maude_System">Maude</a>
+as rewriting engine. Hence, the first step is to download and install the Maude
+system following the instructions <a href="http://maude.cs.illinois.edu/w/index.php?title=Maude_download_and_installation">here</a>.
+We present a basic introduction to Maude <a class="js-scroll-trigger" href="#maude">here</a>.</p>
+<p>Once Maude has been installed (we assume a <strong>maude</strong> command for executing it),
+we can download the CITP repository by using</p>
+<pre><code>git clone https://github.com/ittutu/CITP
+</code></pre><p>This command creates a folder <strong>CITP</strong> in our computer. Among others, it contains
+the subfolder <strong>Tool</strong>, which contains the source code of the tool in the
+<strong>citp.maude</strong> file, and the subfolder <strong>Examples</strong>, with several examples that can
+be executed by users to test the tool. For example, to run the <strong>TAS</strong> example we
+should do as follows:</p>
+<pre><code>maude Tool/citp.maude
+
+cd CITP/Examples/TAS
+load tas.maude
+
+select #CITP# .
+loop init .
+</code></pre><p>The first command starts Maude and loads the CITP. The second command sets the current
+folder as the one containing the tas example, while the third one loads the module into
+Maude. This module contains the simple mutual exclusion protocol <em>test&amp;set</em>, which we
+will explain in detail later.
+Finally, the last two commands select the tool and initiate it, so we can start
+introducing commands.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Verification section -->
-    <section id="about">
+    <!-- Use section -->
+    <section id="use-section">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
+            <h2 id="using-the-citp">Using the CITP</h2>
+<p>In the following we present how to introduce and prove goals in CITP. In Section
+<a class="js-scroll-trigger" href="#goals">Goals</a> we present the syntax for goals. Then, in the
+<a class="js-scroll-trigger" href="#proof-tactics">next section</a> we introduce the tactics that can be used to discharge
+these goals. Finally, we present some <a class="js-scroll-trigger" href="#tips">tips</a> to take advantage of all the
+features implemented in CITP.</p>
+<p>It is important to note that all the commands presented here must be introduced in
+the tool enclosed in parentheses, so they can be parsed by the CITP.</p>
+<h3 id="goals">Goals</h3>
+<p>All proofs start by introducing a goal. In CITP, goals are sets of sentences related
+to a given module. The syntax for introducing goals is</p>
+<pre><code>goal MOD-NAME |-
+SENT1 ;
+...
+SENTn ;
+</code></pre><p>where <code>MOD-NAME</code> is the name of the module where the proof takes place and
+<code>SENT1</code> ... <code>SENTn</code> are the sentences the goal is composed of. These sentences
+can be either equations, membership axioms, and rewrite rules.</p>
+<h3 id="proof-tactics">Proof tactics</h3>
+<p>We present next the tactics available in CITP. In general, we will not apply
+single tactics but tactic lists of the form <strong>(tc1 ... tcn)</strong>, where each <strong>tci</strong>
+is a single tactic.</p>
+<p>Note that CITP handles
+a set of goals of the form <strong>(goal M |- SS)</strong>, with <strong>M</strong> a module and <strong>SS</strong> a
+set of sentences. In contrast to other provers, CITP does not keep a tree structure
+and list of tactics will be applied to all goals.</p>
+<p>If the user wants to apply the tactic list only to the current goal then the
+command <strong>(. tc1 ... tcn)</strong> can be used. Moreover, we can change the current goal
+with <strong>(select N)</strong>, which selects the <strong>N</strong>th goal as current one.</p>
+<h4 id="general-proof-tactics">General proof tactics</h4>
+<p>The general proof tactics, described in the table below, are sound for all
+specifications. It is important to note that</p>
+<p>Some details about these commands are:</p>
+<ul>
+<li><em>Simultaneous induction</em> has syntax <code>ind on V:Sort</code>, for <code>V:Sort</code> a variable
+appearing in the goal. The cases are generated by using the operators marked with
+the <strong>ctor</strong> atribute in the specification.</li>
+<li>The <em>theorem of constants</em> replaces all variables by fresh constants and
+splits the sentences in the same goal in several goals.</li>
+<li><em>Case analysis</em> splits the goals by using the conditions of conditional
+sentences. It assumes the conditions are disjointly true and the left-hand
+side of the sentences is equal.</li>
+<li><em>Implication</em> adds the conditions in the sentences of the goal to the module.</li>
+<li><em>Reduction</em> reduces by rewriting both sides of the current goal.</li>
+<li><em>Initialization</em> has syntax <code>init sen by sub</code>, for a sentence <code>sen</code> and a
+substitution <code>sub</code>, gives concrete values to the variables in the sentence.</li>
+<li><em>Critical pairs left</em> has syntax <strong>(cp-l sentence1 &gt;&lt; sentence2)</strong> tries to unify
+a subterm of <strong>sentence1</strong> with the left-hand side of <strong>sentence2</strong>.
+<strong>cp-r</strong> works analogously for the right-hand side.</li>
+</ul>
+<table class="table">
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simultaneous induction</td>
+<td><strong>ind on</strong></td>
+</tr>
+<tr>
+<td>Theorem of constants</td>
+<td><strong>tc</strong></td>
+</tr>
+<tr>
+<td>Case analysis</td>
+<td><strong>ca</strong></td>
+</tr>
+<tr>
+<td>Implication</td>
+<td><strong>imp</strong></td>
+</tr>
+<tr>
+<td>Reduction</td>
+<td><strong>red</strong></td>
+</tr>
+<tr>
+<td>Initialisation</td>
+<td><strong>init</strong></td>
+</tr>
+<tr>
+<td>Critical pairs left</td>
+<td><strong>cp-l</strong></td>
+</tr>
+<tr>
+<td>Critical pairs right</td>
+<td><strong>cp-r</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="specific-proof-tactics">Specific proof tactics</h4>
+<p>The specific proof tactics, listed in the table below, are sound for initial data
+types that are often used in applications such as sequences/lists, sets and pairs
+as long as they are protected.</p>
+<p>It is important to note that these tactics are designed for goals consisting of a
+specification and a single formula: <strong>ca, tc, imp, red, cs, pair</strong>. However, if one
+of these tactics is applied to a goal of the form <strong>M |- {E1,...,En}</strong>, the goal
+is decomposed into a list of subgoals <strong>(M |- E1), ..., (M |- En)</strong> and then the
+tactic is applied to each goal <strong>M |- Ei</strong>.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Induction based on membership axioms</td>
+<td><strong>indx</strong></td>
+</tr>
+<tr>
+<td>Case analysis for sequences and sets</td>
+<td><strong>cs</strong></td>
+</tr>
+<tr>
+<td>Pair</td>
+<td><strong>pair</strong></td>
+</tr>
+</tbody>
+</table>
+<h4 id="interface-commands">Interface commands</h4>
+<p>In addition to the commands for developing the proof, CITP provides commands
+for interacting with the interface, as shown by the table below.</p>
+<table class="table">
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>rollback</strong></td>
+<td>Returns the proof process to the state before applying the last list of tactics.</td>
+</tr>
+<tr>
+<td><strong>show goals</strong></td>
+<td>Displays the goals to discharge.</td>
+</tr>
+<tr>
+<td><strong>show proof</strong></td>
+<td>Shows the sequence of lists of tactics applied</td>
+</tr>
+<tr>
+<td><strong>redTerm t</strong></td>
+<td>Reduces the term <strong>t</strong> to its normal form  w.r.t. the current module.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tips">Tips</h3>
+<p>In this section we present some syntax conventions useful for specifying and
+proving properties with CITP:</p>
+<ul>
+<li>CITP is well suited for finding inconsistencies in Booleans. For this reason, if we reach
+a module premises like <code>ctor_i = ctor_j</code> it might be useful to define conditional equations
+of the form <code>ceq true = false if ctor_i = ctor_j</code>.</li>
+<li>It might also worth defining goals as conditional equations, with the premises as conditions
+and the actual equation as conclusion.</li>
+<li>Although Maude provides a built-in predicate <code>_==_</code>, its semantics are not appropriate for
+theorem proving. If equalities are required, we recommend defining a new, commutative,
+predicate (CITP examples use <code>_~_</code>) with equations stating that <code>X:Sort ~ X:Sort = true</code>
+for all sorts and <code>ctor_i ~ ctor_j = false</code> for all constructors.</li>
+<li>In order to use the decision mechanisms for tuples they must
+be declared with syntax <code>[_,...,_]</code> or <code>&lt;_,...,_&gt;</code>.</li>
+<li>In order to use the decision mechanisms for multisets they must be defined with syntax <code>__</code>.</li>
+<li>If you try to prove the properties in the examples by yourself you may notice that some
+tactic lists are too long, in the sense that the property is proven before using all the
+tactics. We left these lists unmodified because we consider them standard strategies for
+proving goals and hence we decided to use them consistently for most examples; please feel
+free to modify them and find your own strategies.</li>
+</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Examples section -->
+    <section id="examples-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 id="examples">Examples</h2>
+<p>We present some examples to illustrate the features implemented in CITP.
+We first present a simple example on <a class="js-scroll-trigger" href="#pnat-example">natural numbers</a> and
+then a more complex one on the specification of the <a class="js-scroll-trigger" href="#tas-example">TAS protocol</a>.</p>
+<h3 id="pnat-example">PNat example</h3>
+<p>In this example we define natural numbers by using Peano axioms, which we use to
+define the addition and multiplication functions. Then, we prove that the addition
+is commutative and associative.
+The specification and the proofs are available
+<a class="js-scroll-trigger" href="https://github.com/ittutu/CITP/tree/master/Examples/PNat">here</a>.</p>
+<h4 id="pnat-specification">PNat specification</h4>
+<p>A Maude equational specification starts by <code>fmod</code> (standing for <em>functional module</em>),
+followed by the module name (<code>PNAT</code> in this case, from Peano Natural numbers), and <code>is</code>.
+Then, we can define the sorts, that in our case are <code>PNat</code> for natural numbers and <code>PNzNat</code>
+for non-zero natural numbers. Moreover, we can define a subsort relation between sorts;
+in our case we indicate that all the terms that have sort <code>PNzNat</code> have sort <code>PNat</code> as well:</p>
+<pre><code>fmod PNAT is
+ sorts PNat PNzNat .
+ subsorts PNzNat &lt; PNat .
+</code></pre><p>Next, we define constructors (<code>ctor</code> attribute) for our sorts, using
+operators that receive the arity and the co-arity. In our case <code>0</code> is the
+constructor for <code>PNat</code> and successor (<code>s_</code>, where the underscore is a placeholder)
+is the constructor for <code>PNzNat</code>.</p>
+<pre><code> op 0 : -&gt; PNat [ctor] .
+ op s_ : PNat -&gt; PNzNat [ctor].
+</code></pre><p>If we do not use the <code>ctor</code> attribute then we are defining standard functions, like
+the addition and multiplication below. These functions have a <code>prec</code> attribute that indicate
+how high is their precedence: the lower the number the higher the precedence, so multiplication
+will be evaluated before addition:</p>
+<pre><code> op _+_ : PNat PNat -&gt; PNat [prec 33].
+ op _*_ : PNat PNat -&gt; PNat [prec 31].
+</code></pre><p>Now, we define some variables of sort <code>PNat</code> to use in equations. The equations for addition
+are defined in the usual way; the first one indicates that adding a natural number to <code>0</code>
+returns the given natural number, while the second one applies addition recursively and then
+applies successor:</p>
+<pre><code> vars M N P : PNat .
+
+ eq 0 + N = N             [metadata &quot;1&quot;].
+ eq s M + N = s(M + N)    [metadata &quot;2&quot;].
+</code></pre><p>Note the use of the attribute <code>metadata</code>, that will allow CITP to identify equations.
+The equations for multiplication are defined in a similar way:</p>
+<pre><code> eq M * 0 = 0           [metadata &quot;3&quot;].
+ eq M * s N = M * N + M [metadata &quot;4&quot;].
+endfm
+</code></pre><h4 id="pnat-properties">PNat properties</h4>
+<p>In this section we show how to prove the associativity and commutativity of addition
+as defined above.</p>
+<h5 id="previous-lemmas">Previous lemmas</h5>
+<p>Before starting the main proof we state and prove two lemmas with particular cases
+for the commutativity:</p>
+<pre><code>(goal PNAT |-
+eq M:PNat + 0 = M:PNat ;
+eq M:PNat + s N:PNat = s(M:PNat + N:PNat);)
+</code></pre><p>Note that the goal consists of two equations to be proved in the <code>PNAT</code> module.
+The natural way to proceed is to apply induction on <code>M</code>:</p>
+<pre><code>(ind on M:PNat)
+</code></pre><p>This command creates two goals, one for each constructor of the sort.
+For example, the goal for the successor is:</p>
+<pre><code>--------------------- Goal: 1 ---------------------
+&lt; fmod PNAT is
+sorts Bool PNat PNzNat .
+subsort PNzNat &lt; PNat .
+op x#1 : -&gt; PNat[metadata &quot;induction-constant&quot;].
+eq M:PNat * 0 = 0[metadata &quot;3&quot;].
+eq M:PNat * s N:PNat = M:PNat * N:PNat + M:PNat[metadata &quot;4&quot;].
+eq 0 + N:PNat = N:PNat[metadata &quot;1&quot;].
+eq x#1 + 0 = x#1[metadata &quot;5&quot; metadata &quot;s_&quot;].
+eq x#1 + s N:PNat = s(x#1 + N:PNat)[metadata &quot;6&quot; metadata &quot;s_&quot;].
+eq s M:PNat + N:PNat = s(M:PNat + N:PNat)[metadata &quot;2&quot;].
+. . .
+endfm,
+eq s x#1 + 0 = s x#1 ;
+eq s x#1 + s N:PNat = s(s x#1 + N:PNat); &gt;
+------------------- Current goal -------------------
+</code></pre><p>It is interesting to see the new premises generated in the module
+by the induction command. For example, we have <code>x#1 + 0 = x#1</code>, which
+will be useful to discharge the first equation in the goal by combining
+it with the equation <code>2</code> for addition. We find similar premises to
+discharge the second equation. Hence, it is enough to apply the theorem
+of constants and reduction to prove both goals:</p>
+<pre><code>(tc red)
+</code></pre><h5 id="commutativity">Commutativity</h5>
+<p>In order to use the lemmas above we need to create a new module importing
+<code>PNAT</code> in protecting mode (which indicates that no &quot;junk&quot; and no &quot;confusion&quot;
+is added to the module) and adding the lemmas as equations:</p>
+<pre><code>fmod PNAT-L is
+ pr PNAT .
+ vars M N : PNat .
+ eq N + 0 = N          [metadata &quot;lemma-1&quot;].
+ eq M + s N = s(M + N) [metadata &quot;lemma-2&quot;].
+endfm
+</code></pre><p>The goal is defined in this new module:</p>
+<pre><code>(goal PNAT-L |-
+eq M:PNat + N:PNat = N:PNat + M:PNat ;)
+</code></pre><p>It is enough to apply the same strategy we used above to prove this
+property:</p>
+<pre><code>(ind on M:PNat tc red)
+</code></pre><h5 id="associativity">Associativity</h5>
+<p>The associativity property does not require the lemmas. Hence, we just
+state the goal in the <code>PNAT</code> module:</p>
+<pre><code>(goal PNAT |- eq (X:PNat + Y:PNat)+ Z:PNat = X:PNat + (Y:PNat + Z:PNat);)
+</code></pre><p>and use the tactics shown before to prove it:</p>
+<pre><code>(ind on X:PNat tc red)
+</code></pre><h3 id="tas-example">TAS example</h3>
+<p>We present here a simple example to give users a flavor of how to specify systems
+in Maude and prove properties of them with the CITP. First, we describe how to specify
+the TAS protocol in Maude. Then, we prove properties on it with CITP. The specification
+of the protocol and the proofs are available
+<a class="js-scroll-trigger" href="https://github.com/ittutu/CITP/tree/master/Examples/TAS">here</a>.</p>
+<h4 id="tas-specification">TAS specification</h4>
+<p>We first define the <code>LABEL</code> module to specify the possible states of processes:
+in remainder  section (label <code>cs</code>) or in critical section (label <code>cs</code>).
+These operators are <em>constructors</em> (attribute <code>ctor</code>) of the sort <code>Label</code>.
+We also define a predicate <code>_~_</code> for checking whether two labels are equal:</p>
+<pre><code>fmod LABEL is
+ sort Label .
+
+ ops rs cs : -&gt; Label [ctor] .
+ op _~_ : Label Label -&gt; Bool [comm] .
+ eq (L:Label ~ L:Label) = true .
+ eq (rs ~ cs) = false .
+endfm
+</code></pre><p>The theory <code>PID</code> defines generic process identifiers
+(sort <code>Pid</code>) and the same equality predicate for them:</p>
+<pre><code>fth PID is inc BOOL .
+ sort Pid .
+ op _~_ : Pid Pid -&gt; Bool [comm] .
+ eq (P:Pid ~ P:Pid) = true .
+endfth
+</code></pre><p>The module <code>STATUS</code> specifies the states of the lock, which can be
+either <code>open</code> or <code>close</code>, constructors of the sort <code>Status</code>. We also
+define in this case the equality operator:</p>
+<pre><code>fmod STATUS is
+ sort Status .
+ ops open close : -&gt; Status [ctor] .
+ op _~_ : Status Status -&gt; Bool [comm] .
+ eq (L:Status ~ L:Status) = true .
+ eq (open ~ close) = false .
+endfm
+</code></pre><p>The module <code>TAS</code> is in charge of defining the behavior of the system. It is
+parameterized by the theory <code>PID</code> above, imports the rest of modules, and
+defines a sort <code>Sys</code> for the system:</p>
+<pre><code>fmod TAS{X :: PID} is
+ pr LABEL .
+ pr STATUS .
+ sort Sys .
+</code></pre><p>We define next the constructors for the system. It can be in the initial
+state (<code>init</code>), a process identifier can be entering the critical section
+(<code>enter</code>) or leaving it (<code>leave</code>):</p>
+<pre><code> --- any initial state
+ op init : -&gt; Sys [ctor] .
+ --- transitions
+ op enter : Sys X$Pid -&gt; Sys [ctor] .
+ op leave : Sys X$Pid -&gt; Sys [ctor] .
+</code></pre><p>We also define <em>observations</em> to observe the state of the system in
+a particular moment. The observation <code>pc</code> returns the label associated
+to the <code>Pid</code> given as argument, while <code>lock</code> returns the status of the
+lock:</p>
+<pre><code> op pc   : Sys X$Pid -&gt; Label .
+ op lock : Sys -&gt; Status .
+</code></pre><p>We define some variables and start specifying the observations for the initial
+state. In this case all proceses are in the remainder section and the lock is open.
+Note that we use the attribute <code>metadata</code> to assign names to these equations.
+These names can be used later when proving properties with CITP:</p>
+<pre><code> vars I J : X$Pid .
+ var  S : Sys .
+
+ eq pc(init,I) = rs   [metadata &quot;CA-1&quot;] .
+ eq lock(init) = open [metadata &quot;CA-A&quot;] .
+</code></pre><p>We define next observations for <code>enter</code>. We define <code>pc</code> first:</p>
+<ul>
+<li>The equation <code>CA-PCE1</code> indicates that, if the lock is open and the process is in the
+remainder section, then it can go into the critical section.</li>
+<li>In any other case we need a recursive call:<ul>
+<li>Equation <code>CA-PCE2</code> is applied when the processes are different.</li>
+<li>Equation <code>CA-PCE3</code> is applied when the process is not in the remainder section.</li>
+<li>Equation <code>CA-PCE4</code> is applied when the lock is closed.</li>
+</ul>
+</li>
+</ul>
+<p>Then, we define the equations for <code>lock</code>:</p>
+<ul>
+<li>The equation <code>CA-LE1</code> indicates the lock changes to <code>close</code> when a process enters the
+critical section.</li>
+<li>Otherwise, we recursively traverse the system:<ul>
+<li>The equation <code>CA-LE2</code> is applied when the process is not in the remainder section.</li>
+<li>The equation <code>CA-LE3</code> is applied when the lock was not <code>open</code>.</li>
+</ul>
+</li>
+</ul>
+<pre><code> ceq pc(enter(S,I),J) = cs      if J = I /\ pc(S,I) = rs /\ lock(S) = open [metadata &quot;CA-PCE1&quot;].
+ ceq pc(enter(S,I),J) = pc(S,J) if (J ~ I) = false                         [metadata &quot;CA-PCE2&quot;].
+ ceq pc(enter(S,I),J) = pc(S,J) if (pc(S,I) ~ rs) = false                  [metadata &quot;CA-EPCE3&quot;].
+ ceq pc(enter(S,I),J) = pc(S,J) if (lock(S) ~ open) = false                [metadata &quot;CA-PCE4&quot;].
+
+ ceq lock(enter(S,I)) = close   if pc(S,I) = rs /\ lock(S) = open [metadata &quot;CA-LE1&quot;].
+ ceq lock(enter(S,I)) = lock(S) if (pc(S,I) ~ rs) = false         [metadata &quot;CA-LE2&quot;].
+ ceq lock(enter(S,I)) = lock(S) if (lock(S) ~ open) = false       [metadata &quot;CA-LE3&quot;].
+</code></pre><p>Finally, we define the behavior of the observations for <code>leave</code>. For <code>pc</code>
+we have:</p>
+<ul>
+<li>The equation <code>CA-PCV1</code> indicates that the process goes to the remainder section
+when it was in the critical section.</li>
+<li>Otherwise, we recursively check the state:<ul>
+<li>The equation <code>CA-PCV2</code> is applied when we are looking for a different process.</li>
+<li>The equation <code>CA-PCV3</code> is applied when it was not in the critical section.</li>
+</ul>
+</li>
+</ul>
+<p>Regarding <code>lock</code>, we have the following equations:</p>
+<ul>
+<li>The equation <code>CA-LL1</code> indicates that the lock opens when the process goes
+out of the critical section.</li>
+<li>Otherwise, the equation <code>CA-LL2</code> recursively checks the system:</li>
+</ul>
+<pre><code> ceq pc(leave(S,I),J) = rs      if J = I /\ pc(S,I) = cs [metadata &quot;CA-PCV1&quot;].
+ ceq pc(leave(S,I),J) = pc(S,J) if (J ~ I) = false       [metadata &quot;CA-PCV2&quot;].
+ ceq pc(leave(S,I),J) = pc(S,J) if (pc(S,I) ~ cs) = false[metadata &quot;CA-PCV3&quot;].
+
+ ceq lock(leave(S,I)) = open if pc(S,I) = cs              [metadata &quot;CA-LL1&quot;].
+ ceq lock(leave(S,I)) = lock(S) if (pc(S,I) ~ cs) = false [metadata &quot;CA-LL2&quot;].
+endfm
+</code></pre><h4 id="tas-properties">TAS properties</h4>
+<p>We show now how to prove some properties on this protocol. In particular, we
+prove that the lock is closed when there is a process in the critical section
+(first equation of the goal) and that, if two processes are in the critical
+section at the same time, it is because they are the same process (second equation):</p>
+<pre><code>(goal TAS |-
+ceq lock(S:Sys)= close if pc(S:Sys,I:X$Pid)= cs[nonexec];
+ceq I:X$Pid = J:X$Pid if pc(S:Sys,I:X$Pid)= cs /\ pc(S:Sys,J:X$Pid)= cs[nonexec];)
+</code></pre><p>We start the proof by applying induction on <code>S:Sys</code> and reducing:</p>
+<pre><code>(ind on S:Sys red)
+</code></pre><p>When this command is applied we obtain 3 new goals, one corresponding to each
+constructor for <code>Sys</code>. For example, CITP generates the following goal for <code>leave</code>:</p>
+<pre><code>====================================================
+--------------------- Goal: 1 ---------------------
+&lt; fmod TAS is
+sorts Bool Label Status Sys X$Pid .
+op x#1 : -&gt; Sys[metadata &quot;induction-constant&quot;].
+op z#2 : -&gt; X$Pid[metadata &quot;induction-constant&quot;].
+ceq I:X$Pid = J:X$Pid if pc(x#1,I:X$Pid)= cs /\ pc(x#1,J:X$Pid)= cs[metadata &quot;1&quot; metadata &quot;leave&quot; nonexec].
+ceq lock(x#1)= close if pc(x#1,I:X$Pid)= cs[metadata &quot;2&quot; metadata &quot;leave&quot; nonexec].
+. . .
+endfm,
+ceq I:X$Pid = J:X$Pid if pc(leave(x#1,z#2),I:X$Pid)= cs /\ pc(leave(x#1,z#2),J:X$Pid)= cs[nonexec];
+ceq lock(leave(x#1,z#2))= close if pc(leave(x#1,z#2),I:X$Pid)= cs[nonexec]; &gt;
+------------------- Current goal -------------------
+====================================================
+</code></pre><p>Note how the goals are listed after the current module, where only equations
+and operators generated by CITP are shown for the sake of readability.</p>
+<p>We start proving the goal for <code>init</code>, so we select the appropriate goal:</p>
+<pre><code>(select 2)
+</code></pre><p>which looks like follows:</p>
+<pre><code>&lt; fmod TAS is
+sorts Bool Label Status Sys X$Pid .
+. . .
+endfm,
+ceq I:X$Pid = J:X$Pid if rs = cs /\ rs = cs[nonexec];
+ceq open = close if rs = cs[nonexec]; &gt;
+</code></pre><p>This goal is proven by first applying the theorem of constants and
+implication:</p>
+<pre><code>(. tc red imp red)
+</code></pre><p>once this tactic list is introduced, we obtain a couple of goals
+that looks like this:</p>
+<pre><code>&lt; fmod TAS is
+sorts Bool Label Status Sys X$Pid .
+eq rs = cs [metadata &quot;1&quot;].
+. . .
+endfm,
+eq open = close [nonexec]; &gt;
+</code></pre><p>We know that <code>rs</code> and <code>cs</code> are different and hence we have a
+contradiction. We use it to prove the property with the <code>cp-l</code>
+command:</p>
+<pre><code>(cp-l eq(rs ~ cs)= false ; &gt;&lt; eq rs = cs ;)
+</code></pre><p>We continue the proof by applying the theorem of constants,
+case analysis, and implication:</p>
+<pre><code>(tc red ca-1 red ca red imp red)
+</code></pre><p>This tactic list generates 20 goals, being the first one of them:</p>
+<pre><code>&lt; fmod TAS is
+sorts Bool Label Status Sys X$Pid .
+op I#3 : -&gt; X$Pid[metadata &quot;new&quot;].
+op x#1 : -&gt; Sys[metadata &quot;induction-constant&quot;].
+op z#2 : -&gt; X$Pid[metadata &quot;induction-constant&quot;].
+eq I#3 ~ z#2 = false[metadata &quot;3&quot;].
+eq cs ~ pc(x#1,z#2)= false[metadata &quot;4&quot;].
+eq pc(x#1,I#3)= cs[metadata &quot;5&quot;].
+ceq I:X$Pid = J:X$Pid if pc(x#1,I:X$Pid)= cs /\ pc(x#1,J:X$Pid)= cs[metadata &quot;1&quot; metadata &quot;leave&quot; nonexec].
+ceq lock(x#1)= close if pc(x#1,I:X$Pid)= cs[metadata &quot;2&quot; metadata &quot;leave&quot; nonexec].
+. . .
+endfm,
+eq lock(x#1)= close[nonexec]; &gt;
+</code></pre><p>We see that we have some free variables in the equations labeled as
+<code>1</code> and <code>2</code>, so we can give them concrete values with the <code>init</code> command:</p>
+<pre><code>(init 2 by I:X$Pid &lt;- I#3 red)
+
+(init 1 by I:X$Pid &lt;- I#3 ; J:X$Pid &lt;- z#2 red)
+</code></pre><p>These instantiations discharge 7 goals. The first goal that was not discharged is:</p>
+<pre><code>&lt; fmod TAS is
+sorts Bool Label Status Sys X$Pid .
+op I#3 : -&gt; X$Pid[metadata &quot;new&quot;].
+op x#1 : -&gt; Sys[metadata &quot;induction-constant&quot;].
+op z#2 : -&gt; X$Pid[metadata &quot;induction-constant&quot;].
+eq I#3 = z#2[metadata &quot;7&quot;].
+eq I#3 ~ z#2 = false[metadata &quot;3&quot;].
+eq lock(x#1)= close[metadata &quot;6&quot;].
+eq pc(x#1,I#3)= cs[metadata &quot;5&quot;].
+eq pc(x#1,z#2)= cs[metadata &quot;4&quot;].
+ceq I:X$Pid = J:X$Pid if pc(x#1,I:X$Pid)= cs /\ pc(x#1,J:X$Pid)= cs[metadata &quot;1&quot; metadata &quot;leave&quot; nonexec].
+ceq lock(x#1)= close if pc(x#1,I:X$Pid)= cs[metadata &quot;2&quot; metadata &quot;leave&quot; nonexec].
+. . .
+endfm,
+eq open = close[nonexec]; &gt;
+</code></pre><p>We notice that equations <code>3</code> and <code>7</code> are a contradiction, so we can join
+critical pairs again to discharge this goal:</p>
+<pre><code>(. cp-l 3 &gt;&lt; 7)
+</code></pre><p>The rest of goals are easily discharged following the same ideas we have shown
+above:</p>
+<pre><code>(. cp-l eq(rs ~ cs)= false ; &gt;&lt; eq rs = cs ;)
+(init 1 by I:X$Pid &lt;- I#3 ; J:X$Pid &lt;- J#4 red)
+(. cp-l eq(open ~ close)= false ; &gt;&lt; eq open = close ;)
+(. init 2 by I:X$Pid &lt;- J#4)
+(. cp-l eq(open ~ close)= false ; &gt;&lt; eq open = close ;)
+</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- References section -->
+    <section id="references-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 id="references">References</h2>
+<ul>
+<li>Michel Bidoit, Rolf Hennicker:
+<a href="https://doi.org/10.1016/j.jlap.2005.09.002">Constructor-based observational logic</a>.
+J. Log. Algebr. Program. 67(1-2): 3-51 (2006).</li>
+<li>Michel Bidoit, Rolf Hennicker, Alexander Kurz:
+<a href="https://doi.org/10.1016/S0304-3975(02">Observational logic, constructor-based logic, and their duality</a>00865-4).
+Theor. Comput. Sci. 3(298): 471-510 (2003).</li>
+<li>Kokichi Futatsugi, Daniel Gaina, Kazuhiro Ogata:
+<a href="https://doi.org/10.1016/j.tcs.2012.07.041">Principles of proof scores in CafeOBJ</a>.
+Theor. Comput. Sci. 464:90-112 (2012).</li>
+<li>Daniel Gaina, Kokichi Futatsugi, Kazuhiro Ogata:
+<a href="https://doi.org/10.3217/jucs-018-16-2204">Constructor-based Logics</a>.
+J. UCS 18(16): 2204-2233 (2012).</li>
+<li>Daniel Gaina:
+<a href="https://doi.org/10.1016/j.tcs.2012.12.002">Interpolation in logics with constructors</a>.
+Theor. Comput. Sci. 474: 46-59 (2013).</li>
+<li>Daniel Gaina, Kokichi Futatsugi:
+<a href="https://doi.org/10.1093/logcom/exs044">Initial semantics in logics with constructors</a>.
+J. Log. Comput. 25(1): 95-116 (2015)</li>
+<li>Daniel Gaina, Zhang Min, Yuki Chiba, Yasuhito Arimoto:
+<a href="https://doi.org/10.1007/978-3-642-40206-7_26">Constructor-based Inductive Theorem Prover</a>.
+CALCO 2013, Warsaw, Poland, September 3-6 (2013).</li>
+<li>Daniel Gaina, Dorel Lucanu, Kazuhiro Ogata, Kokichi Futatsugi:
+<a href="https://doi.org/10.1007/978-3-642-54624-2_29">On Automation of OTS/CafeOBJ Method</a>.
+Specification, Algebra, and Software: 578-602 (2014).</li>
+</ul>
           </div>
         </div>
       </div>
