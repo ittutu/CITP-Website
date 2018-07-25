@@ -43,7 +43,10 @@
               <a class="nav-link js-scroll-trigger" href="#download">Download</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#manual">Manual</a>
+              <a class="nav-link js-scroll-trigger" href="#instructions">Instructions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="manual/manual.html">Manual</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -112,26 +115,33 @@
               CITP consists of only one file, <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Tool/citp.maude">citp.maude</a> (now at version 2.0).
               However, please note that you need to have <a href="http://maude.cs.illinois.edu/w/index.php?title=Maude_download_and_installation">Maude</a> installed in order to use the tool.
             </p>
+            <p>
+              Alternatively, you can obtain the full CITP distribution (including a set of example specifications and proofs) from its GitHub repository by using:
+              <pre><code class="bash">git clone https://github.com/ittutu/CITP.git</code></pre>
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Manual section -->
-    <section id="manual">
+    <!-- Instructions section -->
+    <section id="instructions">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 mx-auto">
 
             <h2>Instructions</h2>
             <p>
-              To use CITP, simply copy the file <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Tool/citp.maude">citp.maude</a> to your current/working directory, start <a href="http://maude.lcc.uma.es/manual271/maude-manualch2.html#x13-240002.2">Maude</a>, and type:
-              <pre><code class="nohighlight hljs">in citp</code></pre>
-              See the following PDF for the list of commands available in CITP:
+              To use CITP, simply copy the file <a href="https://raw.githubusercontent.com/ittutu/CITP/master/Tool/citp.maude">citp.maude</a> to your current/working directory, open a terminal, and type:
+              <pre><code class="nohighlight hljs">maude citp.maude</code></pre>
             </p>
-            <ul>
-              <li> <a href="https://github.com/ittutu/CITP/raw/master/Doc/readme.pdf">Readme</a>
-            </ul>
+            <p>
+              If you are using the GitHub distribution, it suffices to open a terminal to the CITP directory and to type:
+              <pre><code class="bash hljs">maude Tool/citp.maude</code></pre>
+            </p>
+            <p>
+              See the following <a href="https://github.com/ittutu/CITP/raw/master/Doc/readme.pdf">PDF</a> for the list of commands available in CITP, or read the <a href="manual/manual.html">manual</a>.
+            </p>
           </div>
         </div>
       </div>
