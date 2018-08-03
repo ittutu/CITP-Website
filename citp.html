@@ -58,6 +58,7 @@
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseFUN" aria-expanded="true" aria-controls="collapseFUN">FUN</a>
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseDS" aria-expanded="true" aria-controls="collapseDS">Decoding Stream (DS)</a>
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseQLOCK" aria-expanded="true" aria-controls="collapseQLOCK">Mutual Exclusion Protocol (QLOCK)</a>
+                <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseTAS" aria-expanded="true" aria-controls="collapseTAS">Test & Set (TAS)</a>
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseABP" aria-expanded="true" aria-controls="collapseABP">Alternating Bit Protocol (ABP)</a>
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseCloud" aria-expanded="true" aria-controls="collapseCloud">Cloud</a>
                 <a class="dropdown-item js-scroll-trigger" href="#examples" data-toggle="collapse" data-target="#collapseST" aria-expanded="true" aria-controls="collapseST">Spanning Tree</a>
@@ -259,6 +260,28 @@
                 </div>
               </div>
 
+              <div class="card">
+                <div class="card-header" id="headingTAS">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTAS" aria-expanded="false" aria-controls="collapseTAS">
+                      Test & Set (TAS)
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseTAS" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                  <div class="card-body">
+                    <p>
+                      As in the QLOCK example above, another protocol that can guarantee such a mutual-exclusion property is TAS, which makes use of shared lock and an atomic test & set operation.
+                      A diagrammatic representation of an execution of the protocol can be found <a href="https://github.com/ittutu/CITP/raw/master/Examples/tas/tas.pdf">here.</a>
+                    </p>
+                    <ul>
+                      <li> <a href="examples/tas/tas-ots.html">Solution 1 (OTS/CafeOBJ method) </a>
+                      <li> <a href="examples/tas/tas-eds.html">Solution 2 (explicitly described states)</a>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
               <div class="card">
                 <div class="card-header" id="headingABP">
                   <h5 class="mb-0">
