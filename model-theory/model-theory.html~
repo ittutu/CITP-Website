@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Model Theory</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script> -->
+  </head>
+
+  <body id="page-top">
+    <!-- About section -->
+    <section id="about">
+      <div class="container">
+        
+        <h2>Many-Sorted First-Order Model Theory</h2>
+
+ </div>
+    </section>
+
+   <!-- jpapers section -->
+    <section id="jpapers">
+      <div class="container">
+	<h2> Journal papers </h2>
+	<ol>
+	  <li> Daniel G&#259;in&#259;,<br>
+	    <a href="http://link.springer.com/article/10.1007/s00165-016-0414-y">
+	      <em class="title"> Birkhoff Style Calculi for Hybrid Logics</em></a>,
+	    <br> Formal Aspects of Computing, vol. 29, issue 5, pp. 805-832, 2017
+	    (<a href="papers/hbir.pdf" title="Hybrid
+	  Birkhoff">pdf</a>)
+
+ </ol>
+
+      </div>
+    </section>	  
+
+
+ </body>
+</html>
